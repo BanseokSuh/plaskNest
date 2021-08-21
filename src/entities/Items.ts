@@ -4,41 +4,36 @@ import {
   CreateDateColumn,
   DeleteDateColumn,
   Entity,
+  ManyToOne,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
 import { IsNotEmpty, IsString } from 'class-validator';
+import { Users } from './Users';
 
 @Entity({ schema: 'plaskNest', name: 'items' })
 export class Items {
-	@ApiProperty({
-		example: 1,
-		description: '아이템 아이디'
-	})
+  
   @PrimaryGeneratedColumn({ type: 'int', name: 'id' })
   id: number;
 
   @IsString()
   @IsNotEmpty()
-	@ApiProperty({
-		example: '상품명1',
-		description: '상품명'
-	})
   @Column('varchar', { name: 'name', length: 30 })
   name: string;
 
   @IsString()
   @IsNotEmpty()
-	@ApiProperty({
-		example: 10000,
-		description: '가격'
-	})
+  @Column('varchar', { name: 'detail', length: 30 })
+  detail: string;
+
+  @IsString()
+  @IsNotEmpty()
   @Column('int', { name: 'price' })
   price: number;
 
   @IsString()
-  @IsNotEmpty()
-  @Column('varchar', { name: 'starCount' })
+  @Column('varchar', { name: 'starCount', default: null })
   starCount: string;
 
   @IsString()
@@ -54,4 +49,8 @@ export class Items {
 
   @DeleteDateColumn()
   deletedAt: Date | null;
+
+
+  @ManyToOne(() => Users, (users) => users.items)
+  user: Users;
 }

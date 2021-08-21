@@ -27,6 +27,7 @@ export class HttpExceptionFilter implements ExceptionFilter {
       });
     }
 
+    // http 에러 모양 : json
     response.status(status).json({
       success: false,
       code: status,

@@ -5,6 +5,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { Users } from 'src/entities/Users';
 import { JwtModule } from '@nestjs/jwt';
 
+require("dotenv").config();
 @Module({
   imports: [
     TypeOrmModule.forFeature([Users]),

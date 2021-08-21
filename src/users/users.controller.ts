@@ -8,9 +8,9 @@ import { UsersService } from './users.service';
 export class UsersController {
 	constructor(private usersService: UsersService) {}
 
-	@Get()
-	getUser() {
-		return this.usersService.getUser();
+	@Post()
+	getUser(@Body() body: any) {
+		return this.usersService.getUserByAccessToken(body.access_token);
 	}
 
 	// 회원가입

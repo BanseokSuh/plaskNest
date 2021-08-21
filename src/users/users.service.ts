@@ -12,8 +12,16 @@ export class UsersService { // 서비스와 테이블을 레포지토리가 이�
 		private jwtService: JwtService,
 	) {}
 
-	getUser() {
-		return 'im getUser'
+	async getUserByAccessToken(accessToken) {
+		try {
+      const target = await this.jwtService.verify(accessToken);
+      const { id } = target;
+      const user = await this.usersRepository.findOne({ id });
+      const { password, salt, ...result } = user;
+      return result;
+    } catch (error) {
+      throw new UnauthorizedException('유효하지 않은 토큰입니다.');
+    }
 	}
 
 	// 회원가입
@@ -24,6 +32,11 @@ export class UsersService { // 서비스와 테이블을 레포지토리가 이�
 			// 이미 존재하는 유저
 			throw new UnauthorizedException('이미 존재하는 사용자입니다');
 		} else {
+
+			if (!this.validateCheck(password)) {
+				throw new UnauthorizedException('비밀번호가 올바르지 않습니다.');
+			}
+
 			const salt = await bcrypt.genSalt(); // 솔트
 			const hashedPassword = await bcrypt.hash(password, salt);
 			const mobileStr = `${mobile.substring(0, 3)}-${mobile.substring(3, mobile.length-4)}-${mobile.slice(-4, mobile.length)}`
@@ -36,6 +49,14 @@ export class UsersService { // 서비스와 테이블을 레포지토리가 이�
 				salt
 			})
 		}
+	}
+
+	validateCheck(password) {
+		const REGEX_PASSWORD = /^(?=.*[a-zA-z])(?=.*[0-9])(?=.*[$`~!@$!%*#^?&\\(\\)\-_=+]).{8,16}$/;
+		if (REGEX_PASSWORD.test(password)) {
+			return true;
+		}
+		return false;
 	}
 
 	// 로그인
