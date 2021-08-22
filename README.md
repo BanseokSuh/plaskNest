@@ -12,6 +12,7 @@
 5. <code>npm run seed:run</code> 실행 ===> seed 데이터베이스 생성해줌
 6. 클라이언트 화면에서 테스트
 
-## Swagger 문서
+## API 문서
 
 - <code>localhost:3095/api</code>에 접속해서 확인할 수 있음
+- 전달된 파일로 확인할 수 있음
